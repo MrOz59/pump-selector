@@ -1,6 +1,6 @@
 {
     "name": "pump-selector",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "author": "MrOz",
     "description": "My Electron App using Electron React Boilerplate",
     "main": "main.js",
