@@ -1,0 +1,40 @@
+{
+    "name": "pump-selector",
+    "version": "0.1.4",
+    "author": "MrOz",
+    "description": "My Electron App using Electron React Boilerplate",
+    "main": "main.js",
+    "scripts": {
+      "start": "electron .",
+      "build": "electron-builder",
+      "postinstall": "electron-builder install-app-deps",
+      "publish": "electron-builder --publish always"
+    },
+    "dependencies": {
+      "electron-updater": "^5.0.0"
+    },
+    "devDependencies": {
+      "electron": "^26.0.0",
+      "electron-builder": "^24.0.0"
+    },
+    "build": {
+      "appId": "com.mroz.pumpselector",
+      "files": [
+        "src/**/*",
+        "main.js",
+        "preload.js"
+      ],
+      "extraResources": {
+        "from": "src/",
+        "to": "src"
+      },
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "MrOz59",
+          "repo": "pump-selector"
+        }
+      ]
+    }
+  }
+  

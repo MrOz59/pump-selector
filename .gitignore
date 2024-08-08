@@ -1,0 +1,54 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+*.log
+
+# Electron cache
+.cache/
+*.cache
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Optional npm cache directory
+.npm/
+
+# Dependency directories
+jspm_packages/
+
+# Snyk reports
+.snyk/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# Compiled output
+*.out
+*.class
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Logs
+*.log
+
+# macOS
+*.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Linux
+*~
