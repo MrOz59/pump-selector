@@ -292,4 +292,90 @@ a:hover {
 .filter-section button:hover {
     background-color: #003d7a;
 }
+.navbar {
+    background-color: #004d80;
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    font-size: 18px;
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #00bfff; /* Azul claro */
+}
+
+/* Ajuste para deslocar o conteúdo para baixo da navbar */
+body {
+    padding-top: 60px; /* Compensação para navbar fixa */
+}
+
+.pump-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pump-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.pump-card h4 {
+    margin-bottom: 10px;
+}
+
+.pump-card a {
+    text-decoration: none;
+    color: #004d80;
+    font-size: 18px;
+}
+
+.pump-card a:hover {
+    color: #00bfff;
+}
+
+#searchInput {
+    width: 80%;
+    max-width: 600px;
+    padding: 12px;
+    margin: 20px auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}

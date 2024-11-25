@@ -347,6 +347,7 @@
                             "pressure":"8,6",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"1,6 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -366,6 +367,7 @@
                             "pressure":"8,6",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"1,6 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -385,6 +387,7 @@
                             "pressure":"6,9",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"2,4 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -404,6 +407,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"3,2 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -423,6 +427,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"6,4 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -442,6 +447,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"6,4 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -460,6 +466,7 @@
                             "pressure":"8,6",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"1,6 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -479,6 +486,7 @@
                             "pressure":"8,6",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"1,6 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -498,6 +506,7 @@
                             "pressure":"6,9",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"2,4 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -517,6 +526,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"3,2 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -536,6 +546,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"6,4 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -555,6 +566,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"6,4 mm",
                             "materials":[
                                 {
                                     "body":"Polipropileno",
@@ -574,6 +586,7 @@
                             "pressure":"6,9",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"2,4 mm",
                             "materials":[
                                 {
                                     "body":"Aluminio",
@@ -593,6 +606,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"3,2 mm",
                             "materials":[
                                 {
                                     "body":"Aluminio",
@@ -612,6 +626,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"6,4 mm",
                             "materials":[
                                 {
                                     "body":"Aluminio",
@@ -631,6 +646,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"6,4 mm",
                             "materials":[
                                 {
                                     "body":"Aluminio",
@@ -650,6 +666,7 @@
                             "pressure":"6,9",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"2,4 mm",
                             "materials":[
                                 {
                                     "body":"Aluminio",
@@ -669,6 +686,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"3,2 mm",
                             "materials":[
                                 {
                                     "body":"Aluminio",
@@ -688,6 +706,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"6,4 mm",
                             "materials":[
                                 {
                                     "body":"Aluminio",
@@ -707,6 +726,7 @@
                             "pressure":"8,3",
                             "canAbrasive":true,
                             "type":"pneumatica",
+                            "solids":"6,4 mm",
                             "materials":[
                                 {
                                     "body":"Aluminio",
@@ -721,6 +741,135 @@
                     
                 }
             ]
+        }
+    ],
+    "materials": [
+        {
+            "Aluminio": [
+                {
+                    "temp-max": "150°C",
+                    "temp-min": "-50°C"
+                }
+            ]
+        },
+        {
+            "Santoprene": [
+                {
+                    "temp-max": "107°C",
+                    "temp-min": "-40°C"
+                }
+            ]
+        },
+        {
+            "AÇO INOXIDÁVEL (316)": [
+                {
+                    "temp-max": "500°C",
+                    "temp-min": "-200°C"
+                }
+            ]
+        },
+        {
+            "PVC": [
+                {
+                    "temp-max": "80°C",
+                    "temp-min": "-10°C"
+                }
+            ]
+        },
+        {
+            "PVDF": [
+                {
+                    "temp-max": "93°C",
+                    "temp-min": "-12°C"
+                }
+            ]
+        },
+        {
+            "Acetal": [
+                {
+                    "temp-max": "82°C",
+                    "temp-min": "-29°C"
+                }
+            ]
+        },
+        {
+            "Ferro Fundido": [
+                {
+                    "temp-max": "200°C",
+                    "temp-min": "-20°C"
+                }
+            ]
+        },
+        {
+            "Polipropileno": [
+                {
+                    "temp-max": "79°C",
+                    "temp-min": "0°C"
+                }
+            ]
+        },
+        {
+            "PTFE": [
+                {
+                    "temp-max": "107°C",
+                    "temp-min": "4°C"
+                }
+            ]
+
+        },
+        {
+            "Hytrel": [
+                {
+                    "temp-max": "82°C",
+                    "temp-min": "-29°C"
+                }
+            ]
+
+        },
+        {
+            "Uretano": [
+                {
+                    "temp-max": "52°C",
+                    "temp-min": "-23°C"
+                }
+            ]
+
+        },
+        {
+            "Neoprene": [
+                {
+                    "temp-max": "93°C",
+                    "temp-min": "-18°C"
+                }
+            ]
+
+        },
+        {
+            "Buna": [
+                {
+                    "temp-max": "82°C",
+                    "temp-min": "-12°C"
+                }
+            ]
+
+        },
+        {
+            "Viton": [
+                {
+                    "temp-max": "177°C",
+                    "temp-min": "-40°C"
+                }
+            ]
+
+        },
+        {
+            "EPDM": [
+                {
+                    "temp-max": "138°C",
+                    "temp-min": "-51°C"
+                }
+            ]
+
         }
     ]
 }

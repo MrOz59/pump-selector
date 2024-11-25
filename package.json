@@ -1,45 +1,44 @@
 {
     "name": "pump-selector",
     "productName": "Pump Selector",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "author": "MrOz",
     "description": "Simple app for pump selection",
     "main": "main.js",
     "scripts": {
-      "start": "electron .",
-      "build": "electron-builder",
-      "postinstall": "electron-builder install-app-deps",
-      "publish": "electron-builder --publish always"
+        "start": "electron .",
+        "build": "electron-builder",
+        "postinstall": "electron-builder install-app-deps",
+        "publish": "electron-builder --publish always"
     },
     "dependencies": {
-      "electron-updater": "^5.0.0"
+        "electron-updater": "^5.0.0"
     },
     "devDependencies": {
-      "electron": "^26.0.0",
-      "electron-builder": "^24.0.0"
+        "electron": "^26.0.0",
+        "electron-builder": "^24.13.3"
     },
     "build": {
-      "win": {
-        "icon": "assets/icon.ico"
-      },
-      "appId": "com.mroz.pumpselector",
-      "files": [
-        "src/**/*",
-        "assets/icon.*",
-        "main.js",
-        "preload.js"
-      ],
-      "extraResources": {
-        "from": "src/",
-        "to": "src"
-      },  
-      "publish": [
-        {
-          "provider": "github",
-          "owner": "MrOz59",
-          "repo": "pump-selector"
-        }
-      ]
+        "win": {
+            "icon": "assets/icon.ico"
+        },
+        "appId": "com.mroz.pumpselector",
+        "files": [
+            "src/**/*",
+            "assets/icon.*",
+            "main.js",
+            "preload.js"
+        ],
+        "extraResources": {
+            "from": "src/",
+            "to": "src"
+        },
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "MrOz59",
+                "repo": "pump-selector"
+            }
+        ]
     }
-  }
-  
+}

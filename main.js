@@ -21,6 +21,7 @@ function createWindow() {
   mainWindow.loadFile('./src/index.html');
   Menu.setApplicationMenu(null);
   mainWindow.maximize();
+  //mainWindow.webContents.openDevTools();
 
   // Garante que o título da janela permaneça fixo, mesmo após carregar uma nova página
   mainWindow.on('page-title-updated', (event) => {

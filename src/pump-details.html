@@ -87,22 +87,85 @@
     </div>
 
     <script>
-        const translations = {
-            helicoidal: {
-                body: 'Corpo',
-                flange: 'Flange',
-                stator: 'Estator',
-                rotor: 'Rotor',
-                seal: 'Selo'
-            },
-            pneumatica: {
-                body: 'Corpo',
-                block: 'Bloco',
-                seats: 'Assentos',
-                diaphragms: 'Diafragmas',
-                spheres: 'Esferas'
+// Função para converter temperatura (ex: "150°C") para número
+function convertToCelsius(temp) {
+    const value = parseFloat(temp); // Converte para número
+    return isNaN(value) ? null : value; // Retorna null se não for um número válido
+}
+
+// Função para calcular o intervalo de temperatura de uma bomba com base nos materiais
+function calculateTemperatureRange(pump, allMaterials) {
+    let tempMin = -Infinity;  // Começa com o valor mínimo possível
+    let tempMax = Infinity;   // Começa com o valor máximo possível
+
+    console.log('Calculando a faixa de temperatura para a bomba:', pump.name);
+
+    // Para cada material usado pela bomba
+    pump.materials.forEach(material => {
+        console.log('Processando material:', material);
+
+        // Para cada tipo de material na bomba (body, flange, stator, etc.)
+        Object.values(material).forEach(materialName => {
+            const normalizedMaterialName = normalizeName(materialName); // Normaliza o nome do material
+            console.log(`Material normalizado: "${normalizedMaterialName}"`);
+
+            // Encontra o material na lista de materiais normalizando também a chave do material
+            const materialData = allMaterials.find(m => {
+                const normalizedKey = normalizeName(Object.keys(m)[0]); // Normaliza a chave do material no JSON
+                return normalizedKey === normalizedMaterialName;
+            });
+
+            if (materialData) {
+                // Pega os valores de temperatura para o material
+                const tempData = materialData[Object.keys(materialData)[0]][0]; // Pega o primeiro objeto do array
+                console.log(`Temperatura do material "${normalizedMaterialName}":`, tempData);
+
+                // Converte as temperaturas para números para comparação
+                const minTemp = convertToCelsius(tempData["temp-min"]);
+                const maxTemp = convertToCelsius(tempData["temp-max"]);
+
+                // Atualiza o valor de tempMin (maior temperatura mínima entre os materiais)
+                if (minTemp !== null && minTemp > tempMin) {
+                    tempMin = minTemp;
+                }
+
+                // Atualiza o valor de tempMax (menor temperatura máxima entre os materiais)
+                if (maxTemp !== null && maxTemp < tempMax) {
+                    tempMax = maxTemp;
+                }
+            } else {
+                console.error(`Material "${materialName}" não encontrado na lista de materiais.`);
             }
-        };
+        });
+    });
+
+    // Se nenhum material foi encontrado, retorna "Não disponível"
+    if (tempMin === -Infinity || tempMax === Infinity) {
+        console.warn('Faixa de temperatura não disponível para esta bomba.');
+        return "Não disponível";
+    }
+
+    console.log(`Faixa de temperatura calculada: ${tempMin}°C a ${tempMax}°C`);
+    return `${tempMin}°C a ${tempMax}°C`;
+}
+
+        
+        const translations = {
+                helicoidal: {
+                    body: 'Corpo',
+                    flange: 'Flange',
+                    stator: 'Estator',
+                    rotor: 'Rotor',
+                    seal: 'Selo'
+                },
+                pneumatica: {
+                    body: 'Corpo',
+                    block: 'Bloco',
+                    seats: 'Assentos',
+                    diaphragms: 'Diafragmas',
+                    spheres: 'Esferas'
+                }
+            };
 
         let currentPage = 1;
         let totalItems = 0;
@@ -145,7 +208,7 @@
         }
 
         // Função para exibir detalhes da bomba
-        function displayPumpDetails(pump) {
+        function displayPumpDetails(pump, allMaterials) {
             const pumpName = pump.name || 'Não disponível';
             const flowMax = pump['flow-max'] || 'Não disponível';
             const flowMin = pump['flow-min'] || 'Não disponível';
@@ -154,6 +217,10 @@
             const materials = translateMaterials(pump.materials, pump.type);
             const canAbrasive = pump.canAbrasive ? 'Sim' : 'Não';
             const pumpCode = pump.code || 'Não disponível';
+            const solids = pump.solids || '0'; // Exibe a nova propriedade
+
+            // Calcular o intervalo de temperatura da bomba
+            const temperatureRange = calculateTemperatureRange(pump, allMaterials);
 
             document.querySelector('#pump-name').textContent = pumpName;
             document.querySelector('#pump-info').innerHTML = `
@@ -163,10 +230,12 @@
                 ${pressure ? `<p class="pump-info">Pressão Máxima: ${pressure} bar</p>` : ''}
                 <p class="pump-info">Materiais:<br> ${materials}</p>
                 <p class="pump-info">Suporta Abrasivo: ${canAbrasive}</p>
-                <p class="pump-info">Codigo: ${pumpCode}</p>
+                <p class="pump-info">Código: ${pumpCode}</p>
+                <p class="pump-info">Sólidos: ${solids}</p> <!-- Exibe a nova propriedade -->
+                <p class="pump-info">Faixa de Temperatura: ${temperatureRange}</p> <!-- Exibe o intervalo de temperatura -->
             `;
         }
-
+        
         // Função para exibir produtos compatíveis com paginação e busca
         function displayCompatibleProducts(products, page = 1, perPage = 20) {
             currentPage = page;
@@ -251,53 +320,54 @@
 
         // Função principal para carregar os dados
         async function loadPumpData(page = 1) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const pumpName = decodeURIComponent(urlParams.get('name'));
+        const urlParams = new URLSearchParams(window.location.search);
+        const pumpName = decodeURIComponent(urlParams.get('name'));
 
-            try {
-                const pumpsData = await fetchJSON('pumps.json');
-                let pump = null;
+        try {
+            const pumpsData = await fetchJSON('pumps.json');
+            let pump = null;
 
-                // Checagem e busca do nome da bomba
-                if (Array.isArray(pumpsData.pumps)) {
-                    pumpsData.pumps.forEach(pumpCategory => {
-                        ['helicoidais', 'pneumatics'].forEach(category => {
-                            if (pumpCategory[category]) {
-                                Object.values(pumpCategory[category][0]).forEach(productList => {
-                                    productList.forEach(p => {
-                                        if (p.name && normalizeName(p.name) === normalizeName(pumpName)) {
-                                            pump = p;
-                                        }
-                                    });
+            // Verifica se a estrutura de pumps está correta
+            console.log('Dados das bombas carregados:', pumpsData.pumps);
+
+            // Checagem e busca do nome da bomba
+            if (Array.isArray(pumpsData.pumps)) {
+                pumpsData.pumps.forEach(pumpCategory => {
+                    ['helicoidais', 'pneumatics'].forEach(category => {
+                        if (pumpCategory[category]) {
+                            Object.values(pumpCategory[category][0]).forEach(productList => {
+                                productList.forEach(p => {
+                                    if (p.name && normalizeName(p.name) === normalizeName(pumpName)) {
+                                        pump = p;
+                                    }
                                 });
-                            }
-                        });
+                            });
+                        }
                     });
-                }
-
-                if (!pump) {
-                    showError('Bomba não encontrada');
-                    return;
-                }
-
-                displayPumpDetails(pump);
-
-                const productsData = await fetchJSON('products.json');
-                const compatibleProducts = productsData.products.filter(product => {
-                    return !pump.canAbrasive && product.abrasive ? false : true;
                 });
-
-                const query = document.querySelector('#searchInput').value;
-                const filteredProducts = filterProducts(compatibleProducts, query);
-
-                displayCompatibleProducts(filteredProducts, page);
-
-            } catch (error) {
-                console.error(`Erro ao carregar dados: ${error.message}`);
-                showError('Erro ao carregar detalhes da bomba. Tente novamente mais tarde.');
             }
-        }
 
+            if (!pump) {
+                showError('Bomba não encontrada');
+                return;
+            }
+
+            // Exibe os detalhes da bomba
+            displayPumpDetails(pump, pumpsData.materials);
+
+            // Carrega produtos compatíveis (como exemplo)
+            const productsData = await fetchJSON('products.json');
+            const compatibleProducts = productsData.products.filter(product => {
+                return !pump.canAbrasive && product.abrasive ? false : true;
+            });
+
+            displayCompatibleProducts(compatibleProducts, page);
+
+        } catch (error) {
+            console.error(`Erro ao carregar dados: ${error.message}`);
+            showError('Erro ao carregar detalhes da bomba. Tente novamente mais tarde.');
+        }
+    }        
         // Adiciona evento para a busca de produtos
         document.querySelector('#searchInput').addEventListener('input', () => {
             loadPumpData(1);

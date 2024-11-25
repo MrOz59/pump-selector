@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Bombas</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Mantém a estilização atual -->
+</head>
+<body>
+    <a href="#" class="back-button" onclick="window.history.back(); return false;"></a>
+    <h1>Lista de Bombas</h1>
+    <input type="text" id="searchInput" placeholder="Buscar bomba por nome ou código..." aria-label="Buscar bomba">
+
+    <div id="pump-list" class="pump-list"></div>
+
+    <script>
+        // Função para buscar dados das bombas
+        fetch('pumps.json') // Garanta que o JSON esteja acessível na mesma pasta
+            .then(response => response.json())
+            .then(data => {
+                const pumps = data.pumps.flatMap(typeObj => {
+                    return Object.values(typeObj).flatMap(pumpGroups => {
+                        return Object.entries(pumpGroups[0]).flatMap(([_, pumpArray]) => pumpArray);
+                    });
+                });
+
+                const pumpListContainer = document.getElementById('pump-list');
+                const searchInput = document.getElementById('searchInput');
+
+                function displayPumps(pumpsToShow) {
+                    pumpListContainer.innerHTML = ''; // Limpa a lista anterior
+                    pumpsToShow.forEach(pump => {
+                        const pumpElement = document.createElement('div');
+                        pumpElement.classList.add('pump-card');
+                        pumpElement.innerHTML = `
+                            <h4><a href="pump-details.html?name=${encodeURIComponent(pump.name)}">${pump.name}</a></h4>
+                            <p><strong>Código:</strong> ${pump.code}</p>
+                            <p><strong>Fluxo Máximo:</strong> ${pump["flow-max"]}</p>
+                        `;
+                        pumpListContainer.appendChild(pumpElement);
+                    });
+                }
+
+                // Função de busca
+                function handleSearch() {
+                    const searchTerm = searchInput.value.toLowerCase();
+                    const filteredPumps = pumps.filter(pump =>
+                        pump.name.toLowerCase().includes(searchTerm) ||
+                        pump.code.toLowerCase().includes(searchTerm)
+                    );
+                    displayPumps(filteredPumps);
+                }
+
+                // Exibe todas as bombas inicialmente
+                displayPumps(pumps);
+
+                // Adiciona evento de busca
+                searchInput.addEventListener('input', handleSearch);
+            })
+            .catch(error => console.error('Erro ao carregar o arquivo JSON:', error));
+    </script>
+
+</body>
+</html>
