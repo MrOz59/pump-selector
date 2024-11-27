@@ -1,7 +1,7 @@
 {
     "name": "pump-selector",
     "productName": "Pump Selector",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "author": "MrOz",
     "description": "Simple app for pump selection",
     "main": "main.js",

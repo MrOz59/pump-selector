@@ -1,67 +1,31 @@
-const { app, BrowserWindow, dialog, Menu } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const { autoUpdater } = require('electron-updater');
 
 let mainWindow;
-const appVersion = app.getVersion();
-const appName = "Pump Selector " + appVersion; 
+const appName = "Pump Selector";
 
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    title: `${appName}`,
-    icon: path.resolve(__dirname, 'assets', 'icon.ico'),
+    title: appName,
+    icon: path.resolve(__dirname, 'assets', 'icon.ico'), // Mantém o ícone do app
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
-
   });
-  mainWindow.setIcon(path.resolve(__dirname, 'assets', 'icon.ico'));
-  mainWindow.loadFile('./src/index.html');
-  Menu.setApplicationMenu(null);
+
+  mainWindow.setIcon(path.resolve(__dirname, 'assets', 'icon.ico')); // Define o ícone
+  mainWindow.loadURL('https://mroz59.github.io/pump-selector/'); // Carrega a URL diretamente
+
+  // Remove o menu da aplicação
+  mainWindow.setMenu(null);
+
   mainWindow.maximize();
-  //mainWindow.webContents.openDevTools();
-
-  // Garante que o título da janela permaneça fixo, mesmo após carregar uma nova página
-  mainWindow.on('page-title-updated', (event) => {
-    event.preventDefault(); // Impede a alteração do título
-    mainWindow.setTitle(appName); // Define novamente o título fixo
-  });
 }
 
 app.on('ready', () => {
   createWindow();
-
-  autoUpdater.checkForUpdatesAndNotify();
-
-  autoUpdater.on('update-available', () => {
-    const response = dialog.showMessageBoxSync(mainWindow, {
-      type: 'info',
-      buttons: ['Sim', 'Depois'],
-      defaultId: 0,
-      title: 'Atualização Disponível',
-      message: 'Há uma nova atualização disponível. Deseja baixar agora?',
-    });
-
-    if (response === 0) { // 'Sim' selecionado
-      autoUpdater.downloadUpdate();
-    }
-  });
-
-  autoUpdater.on('update-downloaded', () => {
-    const response = dialog.showMessageBoxSync(mainWindow, {
-      type: 'info',
-      buttons: ['Reiniciar Agora', 'Depois'],
-      defaultId: 0,
-      title: 'Atualização Pronta',
-      message: 'A atualização foi baixada. Deseja reiniciar o aplicativo agora?',
-    });
-
-    if (response === 0) { // 'Reiniciar Agora' selecionado
-      autoUpdater.quitAndInstall();
-    }
-  });
 });
 
 app.on('window-all-closed', () => {
