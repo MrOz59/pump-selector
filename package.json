@@ -26,8 +26,7 @@
         "files": [
             "src/**/*",
             "assets/icon.*",
-            "main.js",
-            "preload.js"
+            "main.js"
         ],
         "extraResources": {
             "from": "src/",
