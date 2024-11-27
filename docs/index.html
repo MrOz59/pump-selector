@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Resistência Química</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Seu CSS existente */
+        .table-container {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Resistência Química</a>
+            <div class="nav-links">
+                <a href="pumps.html">Bombas</a>
+                <a href="index.html">Produtos</a>
+            </div>
+        </div>
+    </nav>
+<div id="loadingScreen" class="hidden">
+    <div class="spinner"></div>
+    <div>Carregando dados, por favor aguarde...</div>
+</div>
+
+<h2>Tabela de Produtos</h2>
+<input type="text" id="searchInput" placeholder="Buscar produto..." aria-label="Buscar produto">
+<div class="details">
+    <p id="description-info">Classificações: A: efeito leve; B: efeito de leve a moderado; C: efeito moderado; D: efeito severo. —: Informações insuficientes. </p>
+    <p id="description-warning">A exatidão das classificações não pode ser garantida.</p>
+</div>
+
+<div class="table-container">
+    <table id="productTable">
+        <thead>
+            <tr id="tableHeader">
+                <th>Produto</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    showLoadingScreen();
+
+    // Função para normalizar strings
+    function normalizeString(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+
+    // Função para codificar URLs de forma personalizada
+    function customEncodeURIComponent(str) {
+        return encodeURIComponent(str).replace(/%20/g, '+').replace(/%25/g, '');
+    }
+
+    // Função para mostrar a tela de carregamento
+    function showLoadingScreen() {
+        document.getElementById('loadingScreen').classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Desativa a rolagem
+    }
+
+    // Função para esconder a tela de carregamento
+    function hideLoadingScreen() {
+        document.getElementById('loadingScreen').classList.add('hidden');
+        document.body.style.overflow = 'auto'; // Reabilita a rolagem
+    }
+
+    fetch('products.json')
+        .then(response => response.json())
+        .then(data => {
+            const tableHeader = document.querySelector('#tableHeader');
+            const tableBody = document.querySelector('#productTable tbody');
+            const searchInput = document.querySelector('#searchInput');
+
+            // Extrair nomes das resistências
+            const allResistances = new Set();
+            data.products.forEach(product => {
+                product.ressistences[0] && Object.keys(product.ressistences[0]).forEach(resistance => {
+                    allResistances.add(resistance);
+                });
+            });
+
+            // Criar cabeçalhos de coluna
+            const fragment = document.createDocumentFragment();
+            allResistances.forEach(resistance => {
+                const th = document.createElement('th');
+                th.textContent = resistance;
+                fragment.appendChild(th);
+            });
+            tableHeader.appendChild(fragment);
+
+            function displayProducts(filteredProducts) {
+                tableBody.innerHTML = '';
+
+                const fragment = document.createDocumentFragment();
+                filteredProducts.forEach(product => {
+                    const row = document.createElement('tr');
+                    const cellName = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `product.html?name=${customEncodeURIComponent(product.name)}`;
+                    link.textContent = product.name;
+                    link.setAttribute('aria-label', `Detalhes do produto ${product.name}`);
+                    cellName.appendChild(link);
+                    row.appendChild(cellName);
+
+                    allResistances.forEach(resistance => {
+                        const cell = document.createElement('td');
+                        cell.textContent = product.ressistences[0][resistance] || '-';
+                        row.appendChild(cell);
+                    });
+
+                    fragment.appendChild(row);
+                });
+                tableBody.appendChild(fragment);
+                handleScroll();
+            }
+
+            function handleSearch() {
+                showLoadingScreen();
+                const searchTerm = normalizeString(searchInput.value);
+
+                // Filtra produtos
+                setTimeout(() => {
+                    const filteredProducts = data.products.filter(product =>
+                        normalizeString(product.name).includes(searchTerm)
+                    );
+                    displayProducts(filteredProducts);
+                    setTimeout(function(){
+                        hideLoadingScreen(); // Oculta a tela de carregamento quando os dados são carregados
+                    }, 1000);
+                }, 100); // Adiciona um pequeno atraso para simular carregamento
+            }
+
+            // Exibe todos os produtos inicialmente
+            displayProducts(data.products);
+
+            searchInput.addEventListener('input', function(event) {
+                if (event.target.value === '' || event.inputType === 'insertEnter') {
+                    handleSearch();
+                }
+            });
+
+            searchInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    handleSearch();
+                }
+            });
+
+            setTimeout(function(){
+                hideLoadingScreen(); // Oculta a tela de carregamento quando os dados são carregados
+            }, 3000);
+
+        })
+        .catch(error => {
+            console.error('Erro ao carregar o arquivo JSON:', error);
+            setTimeout(function(){
+                hideLoadingScreen(); // Oculta a tela de carregamento mesmo em caso de erro
+            }, 3000); // Oculta a tela de carregamento mesmo em caso de erro
+        });
+
+    let isScrollHandlerAdded = false;
+
+    // Função de rolagem separada
+    function scrollHandler(event) {
+        const tableContainer = document.querySelector('.table-container');
+        if (event.deltaY !== 0) {
+            event.preventDefault();
+            tableContainer.scrollLeft += event.deltaY;
+            console.log(`Rolagem horizontal: ${event.deltaY}`);
+        }
+    }
+
+    function handleScroll() {
+        console.log('handleScroll chamado');
+        const tableContainer = document.querySelector('.table-container');
+        const table = tableContainer.querySelector('table');
+
+        // Função para verificar se a rolagem horizontal é necessária
+        function isScrollRequired() {
+            console.log('Verificando se a rolagem horizontal é necessária');
+            return table.scrollWidth > tableContainer.clientWidth;
+        }
+
+        // Adiciona ou remove o evento de rolagem conforme necessário
+        if (isScrollRequired()) {
+            if (!isScrollHandlerAdded) {
+                console.log('Evento de rolagem adicionado');
+                tableContainer.addEventListener('wheel', scrollHandler);
+                isScrollHandlerAdded = true;
+            }
+        } else {
+            if (isScrollHandlerAdded) {
+                console.log('Rolagem horizontal não é necessária, evento removido');
+                tableContainer.removeEventListener('wheel', scrollHandler);
+                isScrollHandlerAdded = false;
+            }
+        }
+    }
+
+    // Chama a função handleScroll quando a página é carregada
+    window.addEventListener('DOMContentLoaded', (event) => {
+        console.log('DOM completamente carregado e analisado');
+        handleScroll();
+
+        // Chama a função handleScroll sempre que a janela é redimensionada
+        window.addEventListener('resize', () => {
+            console.log('Evento de redimensionamento da janela detectado');
+            handleScroll();
+        });
+    });
+
+    // Toggle da tela de carregamento com Ctrl + K
+    document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.key === 'k') {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen.classList.contains('hidden')) {
+                showLoadingScreen();
+            } else {
+                setTimeout(function(){
+                    hideLoadingScreen(); // Oculta a tela de carregamento quando os dados são carregados
+                }, 3000);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
