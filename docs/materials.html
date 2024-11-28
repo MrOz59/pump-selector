@@ -46,25 +46,23 @@
     <div class="material-container" id="materialContainer"></div>
 
     <script>
-        // JSON dos materiais
-        const jsonData = {
-            "materials": [
-                { "Aluminio": [{ "temp-max": "150°C", "temp-min": "-50°C" }] },
-                { "Santoprene": [{ "temp-max": "107°C", "temp-min": "-40°C" }] },
-                { "AÇO INOXIDÁVEL (316)": [{ "temp-max": "500°C", "temp-min": "-200°C" }] },
-                { "PVC": [{ "temp-max": "80°C", "temp-min": "-10°C" }] },
-                { "Ferro Fundido": [{ "temp-max": "200°C", "temp-min": "-20°C" }] },
-                { "Polipropileno": [{ "temp-max": "79°C", "temp-min": "0°C" }] },
-                { "PTFE": [{ "temp-max": "107°C", "temp-min": "4°C" }] },
-                { "Hytrel": [{ "temp-max": "82°C", "temp-min": "-29°C" }] }
-                // Adicione mais materiais aqui conforme necessário
-            ]
-        };
+        // Função para carregar o JSON do arquivo externo
+        async function fetchMaterials() {
+            try {
+                const response = await fetch('pumps.json'); // Caminho do arquivo JSON
+                const jsonData = await response.json(); // Converte para objeto JSON
+                renderMaterials(jsonData.materials); // Chama a função de renderização
+            } catch (error) {
+                console.error('Erro ao carregar o JSON:', error);
+            }
+        }
 
-        function renderMaterials() {
+        // Função para renderizar os materiais
+        function renderMaterials(materials) {
             const container = document.getElementById('materialContainer');
+            container.innerHTML = ''; // Limpa o conteúdo existente
 
-            jsonData.materials.forEach(materialObj => {
+            materials.forEach(materialObj => {
                 const materialName = Object.keys(materialObj)[0];
                 const materialData = materialObj[materialName][0];
 
@@ -81,8 +79,8 @@
             });
         }
 
-        // Chama a função de renderização ao carregar a página
-        window.onload = renderMaterials;
+        // Chama a função ao carregar a página
+        window.onload = fetchMaterials;
     </script>
 </body>
 </html>
