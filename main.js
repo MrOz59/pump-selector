@@ -25,6 +25,14 @@ function createWindow() {
 }
 
 app.on('ready', () => {
+  defaultSession.clearCache()
+  .then(() => {
+      console.log('Cache limpo com sucesso!');
+  })
+  .catch((error) => {
+      console.error('Erro ao limpar o cache:', error);
+  });
+
   createWindow();
 });
 
