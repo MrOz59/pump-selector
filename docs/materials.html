@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações dos Materiais</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .material-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .material-card {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
+            transition: transform 0.3s ease;
+        }
+        .material-card:hover {
+            transform: translateY(-5px);
+        }
+        .material-card h2 {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .material-card p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Informações dos Materiais</h1>
+    <div class="material-container" id="materialContainer"></div>
+
+    <script>
+        // JSON dos materiais
+        const jsonData = {
+            "materials": [
+                { "Aluminio": [{ "temp-max": "150°C", "temp-min": "-50°C" }] },
+                { "Santoprene": [{ "temp-max": "107°C", "temp-min": "-40°C" }] },
+                { "AÇO INOXIDÁVEL (316)": [{ "temp-max": "500°C", "temp-min": "-200°C" }] },
+                { "PVC": [{ "temp-max": "80°C", "temp-min": "-10°C" }] },
+                { "Ferro Fundido": [{ "temp-max": "200°C", "temp-min": "-20°C" }] },
+                { "Polipropileno": [{ "temp-max": "79°C", "temp-min": "0°C" }] },
+                { "PTFE": [{ "temp-max": "107°C", "temp-min": "4°C" }] },
+                { "Hytrel": [{ "temp-max": "82°C", "temp-min": "-29°C" }] }
+                // Adicione mais materiais aqui conforme necessário
+            ]
+        };
+
+        function renderMaterials() {
+            const container = document.getElementById('materialContainer');
+
+            jsonData.materials.forEach(materialObj => {
+                const materialName = Object.keys(materialObj)[0];
+                const materialData = materialObj[materialName][0];
+
+                const card = document.createElement('div');
+                card.classList.add('material-card');
+                
+                card.innerHTML = `
+                    <h2>${materialName}</h2>
+                    <p><strong>Temperatura Máxima:</strong> ${materialData['temp-max']}</p>
+                    <p><strong>Temperatura Mínima:</strong> ${materialData['temp-min']}</p>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Chama a função de renderização ao carregar a página
+        window.onload = renderMaterials;
+    </script>
+</body>
+</html>
