@@ -771,8 +771,8 @@
         {
             "PVC": [
                 {
-                    "temp-max": "80°C",
-                    "temp-min": "-10°C"
+                    "temp-max": "60°C",
+                    "temp-min": "0°C"
                 }
             ]
         },
@@ -866,8 +866,7 @@
             "EPDM": [
                 {
                     "temp-max": "138°C",
-                    "temp-min": "-51°C",
-                    "testing": "Testing"
+                    "temp-min": "-51°C"
                 }
             ]
 
