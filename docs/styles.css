@@ -186,7 +186,7 @@ p#description-warning {
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     position: fixed;
-    top: 20px;
+    top: 40px;
     left: 20px;
     display: flex;
     align-items: center;
