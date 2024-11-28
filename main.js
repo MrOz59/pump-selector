@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, session } = require('electron');
 const path = require('path');
+
 
 let mainWindow;
 const appName = "Pump Selector";
@@ -25,6 +26,7 @@ function createWindow() {
 }
 
 app.on('ready', () => {
+  const defaultSession = session.defaultSession;
   defaultSession.clearCache()
   .then(() => {
       console.log('Cache limpo com sucesso!');
@@ -32,6 +34,11 @@ app.on('ready', () => {
   .catch((error) => {
       console.error('Erro ao limpar o cache:', error);
   });
+  defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    // Adiciona cabeçalho para evitar o cache
+    details.responseHeaders['Cache-Control'] = ['no-store', 'no-cache', 'must-revalidate', 'proxy-revalidate'];
+    callback({ cancel: false, responseHeaders: details.responseHeaders });
+});
 
   createWindow();
 });
