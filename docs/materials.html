@@ -49,32 +49,36 @@
         // Função para carregar o JSON do arquivo externo
         async function fetchMaterials() {
             try {
-                const response = await fetch('pumps.json'); // Caminho do arquivo JSON
-                const jsonData = await response.json(); // Converte para objeto JSON
-                renderMaterials(jsonData.materials); // Chama a função de renderização
+                const response = await fetch('pumps.json'); // Carrega o arquivo JSON
+                const jsonData = await response.json(); // Converte o conteúdo para JSON
+                renderMaterials(jsonData.materials); // Chama a função para renderizar
             } catch (error) {
                 console.error('Erro ao carregar o JSON:', error);
             }
         }
 
-        // Função para renderizar os materiais
+        // Função para renderizar os materiais dinamicamente
         function renderMaterials(materials) {
             const container = document.getElementById('materialContainer');
             container.innerHTML = ''; // Limpa o conteúdo existente
 
             materials.forEach(materialObj => {
                 const materialName = Object.keys(materialObj)[0];
-                const materialData = materialObj[materialName][0];
+                const materialData = materialObj[materialName][0]; // Primeiro objeto do array
 
+                // Cria o cartão
                 const card = document.createElement('div');
                 card.classList.add('material-card');
                 
-                card.innerHTML = `
-                    <h2>${materialName}</h2>
-                    <p><strong>Temperatura Máxima:</strong> ${materialData['temp-max']}</p>
-                    <p><strong>Temperatura Mínima:</strong> ${materialData['temp-min']}</p>
-                `;
+                // Adiciona o nome do material
+                let cardContent = `<h2>${materialName}</h2>`;
                 
+                // Itera por todas as chaves do objeto (atributos)
+                for (const [key, value] of Object.entries(materialData)) {
+                    cardContent += `<p><strong>${key.replace(/-/g, ' ')}:</strong> ${value}</p>`;
+                }
+                
+                card.innerHTML = cardContent;
                 container.appendChild(card);
             });
         }
