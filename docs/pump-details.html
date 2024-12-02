@@ -107,32 +107,32 @@
 
     <script>
         // Estado atual da unidade
-        let currentUnit = 'C'; // Começa com °C
-        let pumpsData = {}; // Armazenará os dados da bomba
-        let materialsData = []; // Armazenará os dados dos materiais
+let currentUnit = 'C'; // Começa com °C
+let pumpsData = {}; // Armazenará os dados da bomba
+let materialsData = []; // Armazenará os dados dos materiais
 
-        // Função para converter °F para °C
-        function fahrenheitToCelsius(f) {
-            const celsius = ((f - 32) * 5) / 9;
-            console.log(`Converting ${f}°F to ${celsius}°C`);
-            return celsius;
-        }
+// Variáveis globais para armazenar temperaturas em Celsius
+let globalTempMinC = null;
+let globalTempMaxC = null;
 
-        // Função para converter °C para °F
-        function celsiusToFahrenheit(c) {
-            const fahrenheit = (c * 9) / 5 + 32;
-            console.log(`Converting ${c}°C to ${fahrenheit}°F`);
-            return fahrenheit;
-        }
+// Função para converter °F para °C
+function fahrenheitToCelsius(f) {
+    return ((f - 32) * 5) / 9;
+}
 
-        // Função para converter temperaturas com base na unidade
-        function convertTemperature(value, unit) {
-            const tempValue = parseFloat(value);
-            if (isNaN(tempValue)) return null;
-            return unit === '°F' ? fahrenheitToCelsius(tempValue) : tempValue;
-        }
+// Função para converter °C para °F
+function celsiusToFahrenheit(c) {
+    return (c * 9) / 5 + 32;
+}
 
-// Função modificada para calcular a faixa de temperatura
+// Função para converter temperaturas com base na unidade
+function convertTemperature(value, unit) {
+    const tempValue = parseFloat(value);
+    if (isNaN(tempValue)) return null;
+    return unit === '°F' ? fahrenheitToCelsius(tempValue) : tempValue;
+}
+
+// Função para calcular a faixa de temperatura
 function calculateTemperatureRange(pump, allMaterials) {
     let tempMin = -Infinity;
     let tempMax = Infinity;
@@ -154,8 +154,6 @@ function calculateTemperatureRange(pump, allMaterials) {
                 const minTemp = convertTemperature(tempData['temp-min'][0].value, minUnit);
                 const maxTemp = convertTemperature(tempData['temp-max'][0].value, maxUnit);
 
-                console.log(`Material: ${materialName}, minTemp(${minUnit}): ${minTemp}, maxTemp(${maxUnit}): ${maxTemp}`);
-
                 if (minTemp !== null && minTemp > tempMin) tempMin = minTemp;
                 if (maxTemp !== null && maxTemp < tempMax) tempMax = maxTemp;
             }
@@ -163,37 +161,58 @@ function calculateTemperatureRange(pump, allMaterials) {
     });
 
     if (tempMin === -Infinity || tempMax === Infinity) {
-        console.log("Temperature data not available");
         return "Não disponível";
     }
 
-    // Converte para a unidade atual antes de exibir
-    const formattedRange = formatTemperatureRange(tempMin, tempMax, currentUnit);
-    console.log(`Final Temperature Range: ${formattedRange}`);
-    return formattedRange;
+    // Armazena globalmente as temperaturas mínimas e máximas em Celsius
+    globalTempMinC = tempMin;
+    globalTempMaxC = tempMax;
+
+    return formatTemperatureRange(tempMin, tempMax, currentUnit);
 }
 
 // Função para alternar entre °C e °F
 function toggleUnit() {
     currentUnit = (currentUnit === 'C') ? 'F' : 'C';
-    document.querySelector('#unitToggleButton').textContent = currentUnit === 'C' ? 'Trocar para °F' : 'Trocar para °C';
-    console.log(`Current unit changed to: ${currentUnit}`);
-    loadPumpData();  // Recarrega os dados com a nova unidade
+
+    // Atualiza o texto do botão conforme a unidade atual
+    const unitToggleButton = document.getElementById('unitToggleButton');
+    if (unitToggleButton) {
+        unitToggleButton.textContent = currentUnit === 'C' ? 'Trocar para °F' : 'Trocar para °C';
+    }
+
+    // Atualiza a faixa de temperatura sem recalcular
+    updateTemperatureRange();
 }
-        // Formatação da faixa de temperatura conforme a unidade
-        function formatTemperatureRange(minTemp, maxTemp, unit) {
-            console.log(`Formatting range: minTemp=${minTemp}, maxTemp=${maxTemp}, unit=${unit}`);
-            
-            if (unit === 'F') {
-                const minTempF = celsiusToFahrenheit(minTemp);  // Converte o valor mínimo
-                const maxTempF = celsiusToFahrenheit(maxTemp);  // Converte o valor máximo
-                console.log(`Converted Range: ${minTempF.toFixed(1)}°F a ${maxTempF.toFixed(1)}°F`);
-                return `${minTempF.toFixed(1)}°F a ${maxTempF.toFixed(1)}°F`;
-            }
-            
-            console.log(`Range in Celsius: ${minTemp.toFixed(1)}°C a ${maxTemp.toFixed(1)}°C`);
-            return `${minTemp.toFixed(1)}°C a ${maxTemp.toFixed(1)}°C`;
-        }
+
+// Função para atualizar apenas a faixa de temperatura
+function updateTemperatureRange() {
+    if (globalTempMinC === null || globalTempMaxC === null) return;
+
+    let minTemp = globalTempMinC;
+    let maxTemp = globalTempMaxC;
+
+    if (currentUnit === 'F') {
+        minTemp = celsiusToFahrenheit(globalTempMinC);
+        maxTemp = celsiusToFahrenheit(globalTempMaxC);
+    }
+
+    // Atualiza o elemento no DOM
+    const tempRangeElement = document.getElementById('tempRange');
+    if (tempRangeElement) {
+        tempRangeElement.textContent = `Faixa de Temperatura: ${minTemp.toFixed(1)}°${currentUnit} a ${maxTemp.toFixed(1)}°${currentUnit}`;
+    }
+}
+
+// Função para formatar a faixa de temperatura conforme a unidade
+function formatTemperatureRange(minTemp, maxTemp, unit) {
+    if (unit === 'F') {
+        const minTempF = celsiusToFahrenheit(minTemp);
+        const maxTempF = celsiusToFahrenheit(maxTemp);
+        return `${minTempF.toFixed(1)}°F a ${maxTempF.toFixed(1)}°F`;
+    }
+    return `${minTemp.toFixed(1)}°C a ${maxTemp.toFixed(1)}°C`;
+}
 
         const translations = {
                 helicoidal: {
@@ -277,7 +296,7 @@ function toggleUnit() {
                 <p class="pump-info">Suporta Abrasivo: ${canAbrasive}</p>
                 <p class="pump-info">Código: ${pumpCode}</p>
                 <p class="pump-info">Sólidos: ${solids}</p> <!-- Exibe a nova propriedade -->
-                <p class="pump-info">Faixa de Temperatura: ${temperatureRange}</p> <!-- Exibe o intervalo de temperatura -->
+                <p class="pump-info" id="tempRange">Faixa de Temperatura: ${temperatureRange}</p> <!-- Exibe o intervalo de temperatura -->
                 <button id="unitToggleButton" onclick="toggleUnit()">Trocar para °F</button><br>
                 <a class="pump-info" href="materials.html">Ver dados sobre os materiais.</a>
             `;
@@ -415,7 +434,8 @@ function toggleUnit() {
             showError('Erro ao carregar detalhes da bomba. Tente novamente mais tarde.');
         }
     }        
-        // Adiciona evento para a busca de produtos
+      
+    // Adiciona evento para a busca de produtos
         document.querySelector('#searchInput').addEventListener('input', () => {
             loadPumpData(1);
         });
