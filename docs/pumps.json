@@ -795,8 +795,8 @@
         {
             "Ferro Fundido": [
                 {
-                    "temp-max": "200°C",
-                    "temp-min": "-20°C"
+                    "temp-max": "60°C",
+                    "temp-min": "0°C"
                 }
             ]
         },
