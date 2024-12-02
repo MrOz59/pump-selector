@@ -58,6 +58,15 @@
             background-color: #007bff;
             color: white;
         }
+        #unitToggleButton {
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -97,69 +106,95 @@
     </div>
 
     <script>
-// Função para converter temperatura (ex: "150°C") para número
-function convertToCelsius(temp) {
-    const value = parseFloat(temp); // Converte para número
-    return isNaN(value) ? null : value; // Retorna null se não for um número válido
-}
+        // Estado atual da unidade
+        let currentUnit = 'C'; // Começa com °C
+        let pumpsData = {}; // Armazenará os dados da bomba
+        let materialsData = []; // Armazenará os dados dos materiais
 
-// Função para calcular o intervalo de temperatura de uma bomba com base nos materiais
+        // Função para converter °F para °C
+        function fahrenheitToCelsius(f) {
+            const celsius = ((f - 32) * 5) / 9;
+            console.log(`Converting ${f}°F to ${celsius}°C`);
+            return celsius;
+        }
+
+        // Função para converter °C para °F
+        function celsiusToFahrenheit(c) {
+            const fahrenheit = (c * 9) / 5 + 32;
+            console.log(`Converting ${c}°C to ${fahrenheit}°F`);
+            return fahrenheit;
+        }
+
+        // Função para converter temperaturas com base na unidade
+        function convertTemperature(value, unit) {
+            const tempValue = parseFloat(value);
+            if (isNaN(tempValue)) return null;
+            return unit === '°F' ? fahrenheitToCelsius(tempValue) : tempValue;
+        }
+
+// Função modificada para calcular a faixa de temperatura
 function calculateTemperatureRange(pump, allMaterials) {
-    let tempMin = -Infinity;  // Começa com o valor mínimo possível
-    let tempMax = Infinity;   // Começa com o valor máximo possível
+    let tempMin = -Infinity;
+    let tempMax = Infinity;
 
-    console.log('Calculando a faixa de temperatura para a bomba:', pump.name);
-
-    // Para cada material usado pela bomba
     pump.materials.forEach(material => {
-        console.log('Processando material:', material);
-
-        // Para cada tipo de material na bomba (body, flange, stator, etc.)
         Object.values(material).forEach(materialName => {
-            const normalizedMaterialName = normalizeName(materialName); // Normaliza o nome do material
-            console.log(`Material normalizado: "${normalizedMaterialName}"`);
-
-            // Encontra o material na lista de materiais normalizando também a chave do material
+            const normalizedMaterialName = normalizeName(materialName);
             const materialData = allMaterials.find(m => {
-                const normalizedKey = normalizeName(Object.keys(m)[0]); // Normaliza a chave do material no JSON
+                const normalizedKey = normalizeName(Object.keys(m)[0]);
                 return normalizedKey === normalizedMaterialName;
             });
 
             if (materialData) {
-                // Pega os valores de temperatura para o material
-                const tempData = materialData[Object.keys(materialData)[0]][0]; // Pega o primeiro objeto do array
-                console.log(`Temperatura do material "${normalizedMaterialName}":`, tempData);
+                const tempData = materialData[Object.keys(materialData)[0]][0];
+                const minUnit = tempData['temp-min'][0].unit;
+                const maxUnit = tempData['temp-max'][0].unit;
 
-                // Converte as temperaturas para números para comparação
-                const minTemp = convertToCelsius(tempData["temp-min"]);
-                const maxTemp = convertToCelsius(tempData["temp-max"]);
+                // Converte as temperaturas para °C para comparação
+                const minTemp = convertTemperature(tempData['temp-min'][0].value, minUnit);
+                const maxTemp = convertTemperature(tempData['temp-max'][0].value, maxUnit);
 
-                // Atualiza o valor de tempMin (maior temperatura mínima entre os materiais)
-                if (minTemp !== null && minTemp > tempMin) {
-                    tempMin = minTemp;
-                }
+                console.log(`Material: ${materialName}, minTemp(${minUnit}): ${minTemp}, maxTemp(${maxUnit}): ${maxTemp}`);
 
-                // Atualiza o valor de tempMax (menor temperatura máxima entre os materiais)
-                if (maxTemp !== null && maxTemp < tempMax) {
-                    tempMax = maxTemp;
-                }
-            } else {
-                console.error(`Material "${materialName}" não encontrado na lista de materiais.`);
+                if (minTemp !== null && minTemp > tempMin) tempMin = minTemp;
+                if (maxTemp !== null && maxTemp < tempMax) tempMax = maxTemp;
             }
         });
     });
 
-    // Se nenhum material foi encontrado, retorna "Não disponível"
     if (tempMin === -Infinity || tempMax === Infinity) {
-        console.warn('Faixa de temperatura não disponível para esta bomba.');
+        console.log("Temperature data not available");
         return "Não disponível";
     }
 
-    console.log(`Faixa de temperatura calculada: ${tempMin}°C a ${tempMax}°C`);
-    return `${tempMin}°C a ${tempMax}°C`;
+    // Converte para a unidade atual antes de exibir
+    const formattedRange = formatTemperatureRange(tempMin, tempMax, currentUnit);
+    console.log(`Final Temperature Range: ${formattedRange}`);
+    return formattedRange;
 }
 
-        
+// Função para alternar entre °C e °F
+function toggleUnit() {
+    currentUnit = (currentUnit === 'C') ? 'F' : 'C';
+    document.querySelector('#unitToggleButton').textContent = currentUnit === 'C' ? 'Trocar para °F' : 'Trocar para °C';
+    console.log(`Current unit changed to: ${currentUnit}`);
+    loadPumpData();  // Recarrega os dados com a nova unidade
+}
+        // Formatação da faixa de temperatura conforme a unidade
+        function formatTemperatureRange(minTemp, maxTemp, unit) {
+            console.log(`Formatting range: minTemp=${minTemp}, maxTemp=${maxTemp}, unit=${unit}`);
+            
+            if (unit === 'F') {
+                const minTempF = celsiusToFahrenheit(minTemp);  // Converte o valor mínimo
+                const maxTempF = celsiusToFahrenheit(maxTemp);  // Converte o valor máximo
+                console.log(`Converted Range: ${minTempF.toFixed(1)}°F a ${maxTempF.toFixed(1)}°F`);
+                return `${minTempF.toFixed(1)}°F a ${maxTempF.toFixed(1)}°F`;
+            }
+            
+            console.log(`Range in Celsius: ${minTemp.toFixed(1)}°C a ${maxTemp.toFixed(1)}°C`);
+            return `${minTemp.toFixed(1)}°C a ${maxTemp.toFixed(1)}°C`;
+        }
+
         const translations = {
                 helicoidal: {
                     body: 'Corpo',
@@ -243,6 +278,7 @@ function calculateTemperatureRange(pump, allMaterials) {
                 <p class="pump-info">Código: ${pumpCode}</p>
                 <p class="pump-info">Sólidos: ${solids}</p> <!-- Exibe a nova propriedade -->
                 <p class="pump-info">Faixa de Temperatura: ${temperatureRange}</p> <!-- Exibe o intervalo de temperatura -->
+                <button id="unitToggleButton" onclick="toggleUnit()">Trocar para °F</button><br>
                 <a class="pump-info" href="materials.html">Ver dados sobre os materiais.</a>
             `;
         }
