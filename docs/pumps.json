@@ -744,132 +744,305 @@
         }
     ],
     "materials": [
+    {
+      "Aluminio": [
         {
-            "Aluminio": [
-                {
-                    "temp-max": "150°C",
-                    "temp-min": "-50°C"
-                }
-            ]
-        },
-        {
-            "Santoprene": [
-                {
-                    "temp-max": "107°C",
-                    "temp-min": "-40°C"
-                }
-            ]
-        },
-        {
-            "AÇO INOXIDÁVEL (316)": [
-                {
-                    "temp-max": "500°C",
-                    "temp-min": "-200°C"
-                }
-            ]
-        },
-        {
-            "PVC": [
-                {
-                    "temp-max": "60°C",
-                    "temp-min": "0°C"
-                }
-            ]
-        },
-        {
-            "PVDF": [
-                {
-                    "temp-max": "93°C",
-                    "temp-min": "-12°C"
-                }
-            ]
-        },
-        {
-            "Acetal": [
-                {
-                    "temp-max": "82°C",
-                    "temp-min": "-29°C"
-                }
-            ]
-        },
-        {
-            "Ferro Fundido": [
-                {
-                    "temp-max": "60°C",
-                    "temp-min": "0°C"
-                }
-            ]
-        },
-        {
-            "Polipropileno": [
-                {
-                    "temp-max": "79°C",
-                    "temp-min": "0°C"
-                }
-            ]
-        },
-        {
-            "PTFE": [
-                {
-                    "temp-max": "107°C",
-                    "temp-min": "4°C"
-                }
-            ]
-
-        },
-        {
-            "Hytrel": [
-                {
-                    "temp-max": "82°C",
-                    "temp-min": "-29°C"
-                }
-            ]
-
-        },
-        {
-            "Uretano": [
-                {
-                    "temp-max": "52°C",
-                    "temp-min": "-23°C"
-                }
-            ]
-
-        },
-        {
-            "Neoprene": [
-                {
-                    "temp-max": "93°C",
-                    "temp-min": "-18°C"
-                }
-            ]
-
-        },
-        {
-            "Buna": [
-                {
-                    "temp-max": "82°C",
-                    "temp-min": "-12°C"
-                }
-            ]
-
-        },
-        {
-            "Viton": [
-                {
-                    "temp-max": "177°C",
-                    "temp-min": "-40°C"
-                }
-            ]
-
-        },
-        {
-            "EPDM": [
-                {
-                    "temp-max": "138°C",
-                    "temp-min": "-51°C"
-                }
-            ]
-
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "150",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-50",
+              "unit": "°C"
+            }
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "Santoprene": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "107",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-40",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "AÇO INOXIDÁVEL (316)": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "500",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-200",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PVC": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "60",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "0",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PVDF": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "93",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-12",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Acetal": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "82",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-29",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Ferro Fundido": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "60",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "0",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Polipropileno": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "79",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "0",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "PTFE": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "107",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "4",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Hytrel": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "82",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-29",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Uretano": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "52",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-23",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Neoprene": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "93",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-18",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Buna": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "82",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-12",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Viton": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "177",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-40",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "EPDM": [
+        {
+          "temp-max": [
+            {
+              "name": "Temperatura Maxima",
+              "value": "138",
+              "unit": "°C"
+            }
+          ],
+          "temp-min": [
+            {
+              "name": "Temperatura Minima",
+              "value": "-51",
+              "unit": "°C"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

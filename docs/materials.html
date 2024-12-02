@@ -68,16 +68,16 @@
                 console.error('Erro ao carregar o JSON:', error);
             }
         }
-
+    
         // Função para renderizar os materiais dinamicamente
         function renderMaterials(materials) {
             const container = document.getElementById('materialContainer');
             container.innerHTML = ''; // Limpa o conteúdo existente
-
+    
             materials.forEach(materialObj => {
                 const materialName = Object.keys(materialObj)[0];
                 const materialData = materialObj[materialName][0]; // Primeiro objeto do array
-
+    
                 // Cria o cartão
                 const card = document.createElement('div');
                 card.classList.add('material-card');
@@ -85,18 +85,20 @@
                 // Adiciona o nome do material
                 let cardContent = `<h2>${materialName}</h2>`;
                 
-                // Itera por todas as chaves do objeto (atributos)
-                for (const [key, value] of Object.entries(materialData)) {
-                    cardContent += `<p><strong>${key.replace(/-/g, ' ')}:</strong> ${value}</p>`;
+                // Itera por todas as chaves do objeto (ex: temp-max, temp-min)
+                for (const [key, valueArray] of Object.entries(materialData)) {
+                    // Acessa o primeiro objeto do array (detalhes da temperatura)
+                    const detail = valueArray[0];
+                    cardContent += `<p><strong>${detail.name}:</strong> ${detail.value} ${detail.unit}</p>`;
                 }
                 
                 card.innerHTML = cardContent;
                 container.appendChild(card);
             });
         }
-
+    
         // Chama a função ao carregar a página
         window.onload = fetchMaterials;
-    </script>
+    </script>    
 </body>
 </html>
